@@ -13,6 +13,12 @@
             <Label x:Name="direction" HorizontalOptions="FillAndExpand">Dir</Label>
             <Button Text="go" x:Name="go" HorizontalOptions="FillAndExpand" />
         </StackLayout>
+        <Button x:Name="btnUp" Text="Up"/>
+    <StackLayout Orientation="Horizontal">
+            <Button x:Name="btnLeft" Text="Left"></Button>
+            <Button x:Name="btnRight" Text="Right"></Button>
+    </StackLayout>
+    <Button x:Name="btnDown" Text="Down"></Button>
         <elements:CanvasView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  x:Name="canvas" Touch="Canvas_Touch" EnableTouchEvents="True" />
 </StackLayout>
 

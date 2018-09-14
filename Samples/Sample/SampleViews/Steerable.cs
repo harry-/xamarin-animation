@@ -7,6 +7,7 @@ namespace Sample.SampleViews
     {
         public Vector MovementVector { get; set; } = new Vector(0, 0);
         public Vector OldMovementVector { get; set; } = new Vector(0, 0);
+        public Vector Acceleration { get; set; } = new Vector(0, 0);
         public Vector UnitDirection { get { return MovementVector.unitVector(); }  }
 
         public Steerable(int maxX, int maxY)

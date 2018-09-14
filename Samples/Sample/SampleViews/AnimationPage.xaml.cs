@@ -15,12 +15,17 @@ namespace Sample.SampleViews
         public AnimationPage()
         {
             InitializeComponent();
-            
 
             go.Clicked += delegate
             {
                     Play2();
             };
+
+            btnUp.Clicked += delegate { steerable.Acceleration.y--; };
+            btnDown.Clicked += delegate { steerable.Acceleration.y++; };
+            btnLeft.Clicked += delegate { steerable.Acceleration.x--; };
+            btnRight.Clicked += delegate { steerable.Acceleration.x++; };
+            
 
             AddRectangle();
         }
@@ -35,6 +40,7 @@ namespace Sample.SampleViews
                     
                 //steerable._rectangle.Location = new SKPoint((float)(steerable._rectangle.X+ steerable.UnitDirection.x * value *10), (float)(steerable._rectangle.Y + steerable.UnitDirection.y * value*10));
                 steerable.MovementVector.addVector(gravity);
+                steerable.MovementVector.addVector(steerable.Acceleration);
                 steerable._rectangle.Location = new SKPoint((float)(steerable._rectangle.X+ steerable.MovementVector.x * value), (float)(steerable._rectangle.Y + steerable.MovementVector.y * value));
                 canvas.ResumeLayout(true);
 
@@ -57,7 +63,6 @@ namespace Sample.SampleViews
                 }
             })
             .Commit(this, "Anim", length: 100000, easing: Easing.Linear);
-            
         }
 
         private void AddRectangle()
@@ -75,7 +80,6 @@ namespace Sample.SampleViews
                 direction.Text = steerable.MovementVector.stringify();
 
                 Debug.WriteLine("vector from " + new Vector(steerable._rectangle.X, steerable._rectangle.Y).stringify() + " to " + new Vector(e.Location.X, e.Location.Y).stringify() + ": " + new Vector(steerable._rectangle.X, steerable._rectangle.Y, e.Location.X, e.Location.Y).stringify());
-
            }
         }
     }
