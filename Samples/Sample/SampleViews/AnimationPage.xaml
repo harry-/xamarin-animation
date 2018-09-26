@@ -4,22 +4,22 @@
              x:Class="Sample.SampleViews.AnimationPage"
              xmlns:elements="clr-namespace:SkiaSharp.Elements;assembly=SkiaSharp.Elements"
              Title="Detail"
-
-             
-             
              >
-<StackLayout HeightRequest="800">
+<StackLayout HeightRequest="800" >
         <StackLayout Orientation="Horizontal">
-            <Label x:Name="direction" HorizontalOptions="FillAndExpand">Dir</Label>
+            <Label x:Name="lblX" HorizontalOptions="FillAndExpand" Text="{Binding X}"/>
             <Button Text="go" x:Name="go" HorizontalOptions="FillAndExpand" />
         </StackLayout>
         <Button x:Name="btnUp" Text="Up"/>
+    <Slider x:Name="sliderY" Minimum="-10" Maximum="10" Value="{Binding X, Mode=TwoWay}" ></Slider>
+    <Switch x:Name="switchGravity" IsToggled="{Binding Gravity, Mode=TwoWay}"></Switch>
     <StackLayout Orientation="Horizontal">
             <Button x:Name="btnLeft" Text="Left"></Button>
             <Button x:Name="btnRight" Text="Right"></Button>
-    </StackLayout>
+        </StackLayout>
     <Button x:Name="btnDown" Text="Down"></Button>
-        <elements:CanvasView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  x:Name="canvas" Touch="Canvas_Touch" EnableTouchEvents="True" />
+           
+            <elements:CanvasView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  x:Name="canvas" Touch="Canvas_Touch" EnableTouchEvents="True" />
 </StackLayout>
 
 

@@ -13,6 +13,7 @@ namespace Sample.SampleViews
         public int dirX { get; set; }
         public int dirY { get; set; }
         public float speed { get; set; }
+        public int size { get; set; }
 
         public SkiaSharp.Elements.Rectangle _rectangle;
 
@@ -22,6 +23,13 @@ namespace Sample.SampleViews
         {
             x = rnd.Next(maxX);
             y = rnd.Next(maxY);
+        }
+
+        public Truc(int maxX, int maxY, int maxSize)
+        {
+            x = rnd.Next(maxX);
+            y = rnd.Next(maxY);
+            size = rnd.Next(maxSize);
         }
 
         public Truc() { }

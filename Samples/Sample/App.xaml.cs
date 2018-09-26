@@ -12,6 +12,7 @@ namespace Sample
         public static float DisplayScreenHeight;
         public static float DisplayScaleFactor;
 
+
         public App()
         {
             InitializeComponent();

@@ -1,7 +1,9 @@
-﻿using SkiaSharp;
+﻿using System;
+using SkiaSharp;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using Java.Lang;
+using SkiaSharp.Elements;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,23 +13,34 @@ namespace Sample.SampleViews
     public partial class AnimationPage : ContentPage
     {
         private Steerable steerable = new Steerable(500, 500);
-        
+        MainViewModel vm = new MainViewModel();
+        Simulation sim = new Simulation();
+
         public AnimationPage()
         {
+     
             InitializeComponent();
+            BindingContext = vm;
+            sim.MaxX = canvas.Width;
+            sim.MaxY = canvas.Height;
 
             go.Clicked += delegate
             {
                     Play2();
             };
 
-            btnUp.Clicked += delegate { steerable.Acceleration.y--; };
-            btnDown.Clicked += delegate { steerable.Acceleration.y++; };
-            btnLeft.Clicked += delegate { steerable.Acceleration.x--; };
-            btnRight.Clicked += delegate { steerable.Acceleration.x++; };
-            
+            btnUp.Clicked += delegate
+            {
+                steerable.Acceleration.y += 5;
+                Debug.WriteLine("clicked");
 
+            };
+            btnDown.Clicked += delegate { steerable.Acceleration.y-=5; };
+            btnLeft.Clicked += delegate { steerable.Acceleration.x-=5; };
+            btnRight.Clicked += delegate { steerable.Acceleration.x+=5; };
+      
             AddRectangle();
+
         }
 
         private void Play2()
@@ -38,10 +51,14 @@ namespace Sample.SampleViews
             {
                 canvas.SuspendLayout();
                     
-                //steerable._rectangle.Location = new SKPoint((float)(steerable._rectangle.X+ steerable.UnitDirection.x * value *10), (float)(steerable._rectangle.Y + steerable.UnitDirection.y * value*10));
-                steerable.MovementVector.addVector(gravity);
+                if(vm.Gravity == true)
+                    steerable.MovementVector.addVector(gravity);
                 steerable.MovementVector.addVector(steerable.Acceleration);
+                steerable.Acceleration= new Vector(0,0);
                 steerable._rectangle.Location = new SKPoint((float)(steerable._rectangle.X+ steerable.MovementVector.x * value), (float)(steerable._rectangle.Y + steerable.MovementVector.y * value));
+                Debug.WriteLine("new X: " + steerable._rectangle.X);
+                vm.X = steerable._rectangle.X;
+                //lblX.Text = steerable._rectangle.X.ToString(); 
                 canvas.ResumeLayout(true);
 
                 if (steerable._rectangle.Y > (float)canvas.Height-steerable._rectangle.Height)
@@ -63,11 +80,13 @@ namespace Sample.SampleViews
                 }
             })
             .Commit(this, "Anim", length: 100000, easing: Easing.Linear);
+
         }
 
         private void AddRectangle()
         {
-            canvas.Elements.Add(steerable._rectangle); 
+            canvas.Elements.Add(steerable._rectangle);
+            sim.AddRandomObject();
         }
 
         private void Canvas_Touch(object sender, SkiaSharp.Views.Forms.SKTouchEventArgs e)
@@ -76,8 +95,9 @@ namespace Sample.SampleViews
             {
                 Vector Dir = new Vector(steerable._rectangle.X, steerable._rectangle.Y, e.Location.X, e.Location.Y).unitVector();
                 Dir.scalarMultiplication(10);
+                
                 steerable.MovementVector.addVector(Dir );
-                direction.Text = steerable.MovementVector.stringify();
+                lblX.Text = steerable.MovementVector.stringify();
 
                 Debug.WriteLine("vector from " + new Vector(steerable._rectangle.X, steerable._rectangle.Y).stringify() + " to " + new Vector(e.Location.X, e.Location.Y).stringify() + ": " + new Vector(steerable._rectangle.X, steerable._rectangle.Y, e.Location.X, e.Location.Y).stringify());
            }
