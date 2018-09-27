@@ -13,7 +13,7 @@ namespace Sample.SampleViews
         public int dirX { get; set; }
         public int dirY { get; set; }
         public float speed { get; set; }
-        public int size { get; set; }
+        public int size { get; set; } = 10;
 
         public SkiaSharp.Elements.Rectangle _rectangle;
 

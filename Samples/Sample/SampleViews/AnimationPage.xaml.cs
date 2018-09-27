@@ -12,17 +12,20 @@ namespace Sample.SampleViews
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AnimationPage : ContentPage
     {
-        private Steerable steerable = new Steerable(500, 500);
         MainViewModel vm = new MainViewModel();
         Simulation sim = new Simulation();
 
         public AnimationPage()
         {
-     
             InitializeComponent();
             BindingContext = vm;
-            sim.MaxX = canvas.Width;
-            sim.MaxY = canvas.Height;
+
+            Debug.WriteLine("canvas dimensions: {0}/{1}", canvas.Width, canvas.Height);
+
+            sim.MaxX = 500;
+            sim.MaxY = 500;
+            //sim.MaxX = canvas.Width;
+            //sim.MaxY = canvas.Height;
 
             go.Clicked += delegate
             {
@@ -31,16 +34,24 @@ namespace Sample.SampleViews
 
             btnUp.Clicked += delegate
             {
-                steerable.Acceleration.y += 5;
-                Debug.WriteLine("clicked");
+                ////steerable.Acceleration.y += 5;
+                //Debug.WriteLine("clicked");
 
             };
-            btnDown.Clicked += delegate { steerable.Acceleration.y-=5; };
-            btnLeft.Clicked += delegate { steerable.Acceleration.x-=5; };
-            btnRight.Clicked += delegate { steerable.Acceleration.x+=5; };
+            btnDown.Clicked += delegate
+            {
+                //steerable.Acceleration.y-=5;
+            };
+            btnLeft.Clicked += delegate
+            {
+                //steerable.Acceleration.x-=5;
+            };
+            btnRight.Clicked += delegate
+            {
+                //steerable.Acceleration.x+=5;
+            };
       
             AddRectangle();
-
         }
 
         private void Play2()
@@ -50,34 +61,39 @@ namespace Sample.SampleViews
             new Animation((value) =>
             {
                 canvas.SuspendLayout();
-                    
-                if(vm.Gravity == true)
-                    steerable.MovementVector.addVector(gravity);
-                steerable.MovementVector.addVector(steerable.Acceleration);
-                steerable.Acceleration= new Vector(0,0);
-                steerable._rectangle.Location = new SKPoint((float)(steerable._rectangle.X+ steerable.MovementVector.x * value), (float)(steerable._rectangle.Y + steerable.MovementVector.y * value));
-                Debug.WriteLine("new X: " + steerable._rectangle.X);
-                vm.X = steerable._rectangle.X;
-                //lblX.Text = steerable._rectangle.X.ToString(); 
-                canvas.ResumeLayout(true);
 
-                if (steerable._rectangle.Y > (float)canvas.Height-steerable._rectangle.Height)
+                foreach (var obj in sim.Objects)
                 {
-                    steerable._rectangle.Y= (float) canvas.Height-steerable._rectangle.Height;
-                    steerable.MovementVector.y = 0;
-                    if (steerable.MovementVector.x < -1)
+                    if(vm.Gravity == true)
+                        obj.MovementVector.addVector(gravity);
+                    obj.MovementVector.addVector(obj.Acceleration);
+                    obj.Acceleration= new Vector(0,0);
+                    obj._rectangle.Location = new SKPoint((float)(obj._rectangle.X+ obj.MovementVector.x * value), (float)(obj._rectangle.Y + obj.MovementVector.y * value));
+                    Debug.WriteLine("new X: " + obj._rectangle.X);
+                    vm.X = obj._rectangle.X;
+                    //lblX.Text = obj._rectangle.X.ToString(); 
+                    //canvas.ResumeLayout(true);
+
+                    if (obj._rectangle.Y > (float)canvas.Height-obj._rectangle.Height)
                     {
-                        steerable.MovementVector.x+=1;
-                    }
-                    else if (steerable.MovementVector.x > 1)
-                    {
-                        steerable.MovementVector.x -= 1;
-                    }
-                    else
-                    {
-                        steerable.MovementVector.x = 0;
+                        obj._rectangle.Y= (float) canvas.Height-obj._rectangle.Height;
+                        obj.MovementVector.y = 0;
+                        if (obj.MovementVector.x < -1)
+                        {
+                            obj.MovementVector.x+=1;
+                        }
+                        else if (obj.MovementVector.x > 1)
+                        {
+                            obj.MovementVector.x -= 1;
+                        }
+                        else
+                        {
+                            obj.MovementVector.x = 0;
+                        }
                     }
                 }
+                    
+                canvas.ResumeLayout(true);
             })
             .Commit(this, "Anim", length: 100000, easing: Easing.Linear);
 
@@ -85,21 +101,26 @@ namespace Sample.SampleViews
 
         private void AddRectangle()
         {
-            canvas.Elements.Add(steerable._rectangle);
-            sim.AddRandomObject();
+            for (int i = 0; i < 5; i++)
+            {
+                sim.AddRandomObject();
+                canvas.Elements.Add(sim.Objects[sim.Objects.Count-1]._rectangle);
+            }
+            //foreach (var obj in sim.Objects)
+            //{
+            //    canvas.Elements.Add(obj._rectangle);
+            //}
         }
 
         private void Canvas_Touch(object sender, SkiaSharp.Views.Forms.SKTouchEventArgs e)
         {
             if (e.ActionType == SkiaSharp.Views.Forms.SKTouchAction.Pressed)
             {
-                Vector Dir = new Vector(steerable._rectangle.X, steerable._rectangle.Y, e.Location.X, e.Location.Y).unitVector();
+                Vector Dir = new Vector(sim.Objects[0]._rectangle.X, sim.Objects[0]._rectangle.Y, e.Location.X, e.Location.Y).unitVector();
                 Dir.scalarMultiplication(10);
                 
-                steerable.MovementVector.addVector(Dir );
-                lblX.Text = steerable.MovementVector.stringify();
-
-                Debug.WriteLine("vector from " + new Vector(steerable._rectangle.X, steerable._rectangle.Y).stringify() + " to " + new Vector(e.Location.X, e.Location.Y).stringify() + ": " + new Vector(steerable._rectangle.X, steerable._rectangle.Y, e.Location.X, e.Location.Y).stringify());
+                sim.Objects[0].MovementVector.addVector(Dir);
+                lblX.Text = sim.Objects[0].MovementVector.stringify();
            }
         }
     }

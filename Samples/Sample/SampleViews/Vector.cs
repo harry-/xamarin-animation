@@ -30,7 +30,6 @@ namespace Sample.SampleViews
         {
             x = x2 - x1;
             y = y2 - y1;
-
         }
 
         public Vector()
@@ -48,8 +47,6 @@ namespace Sample.SampleViews
 
             UnitVector.x = x / length();
             UnitVector.y = y / length();
-
-
 
             return UnitVector;
         }
