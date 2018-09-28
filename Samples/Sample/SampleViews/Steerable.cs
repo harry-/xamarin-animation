@@ -26,22 +26,12 @@ namespace Sample.SampleViews
         public Steerable(int maxX, int maxY, int maxSize)
         {
             System.Diagnostics.Debug.WriteLine("constructor max values: " + maxX + '/' + maxY + '/' + maxSize);
-            try
-            {
-                size = rnd.Next(maxSize);
 
-                SKPoint loc = new SKPoint(rnd.Next(maxX), rnd.Next(maxY));
-                _rectangle = new SkiaSharp.Elements.Rectangle(SKRect.Create(loc, new SKSize(size, size)))
-                {
-                    FillColor = SKColors.SteelBlue
-                };
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                System.Diagnostics.Debug.WriteLine(e.Message);
-            }
+            size = rnd.Next(maxSize)+20;
 
+            SKPoint loc = new SKPoint(rnd.Next(maxX), rnd.Next(maxY));
+            _rectangle = new SkiaSharp.Elements.Rectangle(SKRect.Create(loc, new SKSize(size, size)));
+            _rectangle.FillColor = new SKColor((byte)rnd.Next(256),(byte)rnd.Next(256),(byte)rnd.Next(256));
 
         }
     }

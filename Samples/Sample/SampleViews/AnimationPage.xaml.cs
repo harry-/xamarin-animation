@@ -6,6 +6,7 @@ using Java.Lang;
 using SkiaSharp.Elements;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Object = Java.Lang.Object;
 
 namespace Sample.SampleViews
 {
@@ -69,10 +70,28 @@ namespace Sample.SampleViews
                     obj.MovementVector.addVector(obj.Acceleration);
                     obj.Acceleration= new Vector(0,0);
                     obj._rectangle.Location = new SKPoint((float)(obj._rectangle.X+ obj.MovementVector.x * value), (float)(obj._rectangle.Y + obj.MovementVector.y * value));
-                    Debug.WriteLine("new X: " + obj._rectangle.X);
                     vm.X = obj._rectangle.X;
                     //lblX.Text = obj._rectangle.X.ToString(); 
                     //canvas.ResumeLayout(true);
+
+                    // inter object gravity
+
+                    foreach (var otherObject  in sim.Objects)
+                    {
+                        
+                    }
+
+                    // collisions
+                    foreach (var otherObject in sim.Objects)
+                    {
+                        if (otherObject.Equals(obj))
+                            continue;
+                        if (obj._rectangle.Bounds.IntersectsWith(otherObject._rectangle.Bounds))
+                        {
+                            obj.MovementVector.x = 0;
+                            obj.MovementVector.y = 0;
+                        }
+                    }
 
                     if (obj._rectangle.Y > (float)canvas.Height-obj._rectangle.Height)
                     {
@@ -96,20 +115,15 @@ namespace Sample.SampleViews
                 canvas.ResumeLayout(true);
             })
             .Commit(this, "Anim", length: 100000, easing: Easing.Linear);
-
         }
 
         private void AddRectangle()
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 100; i++)
             {
                 sim.AddRandomObject();
                 canvas.Elements.Add(sim.Objects[sim.Objects.Count-1]._rectangle);
             }
-            //foreach (var obj in sim.Objects)
-            //{
-            //    canvas.Elements.Add(obj._rectangle);
-            //}
         }
 
         private void Canvas_Touch(object sender, SkiaSharp.Views.Forms.SKTouchEventArgs e)

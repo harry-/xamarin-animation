@@ -24,7 +24,6 @@ namespace Sample.SampleViews
             set
             {
                 _X = value;
-                Debug.WriteLine("new X:" + _X);
                 NotifyPropertyChanged("X");
             }
         }
