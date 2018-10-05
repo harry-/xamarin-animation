@@ -1,7 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using SkiaSharp;
 
 namespace Sample.SampleViews
 {
@@ -74,6 +72,12 @@ namespace Sample.SampleViews
         public string stringify()
         {
             return x + "/" + y;
+        }
+
+        public Vector (SKPoint A, SKPoint B)
+        {
+            x = B.X - A.X;
+            y = B.Y - A.Y;
         }
     }
 

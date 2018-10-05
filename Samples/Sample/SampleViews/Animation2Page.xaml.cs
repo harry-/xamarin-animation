@@ -58,7 +58,7 @@ namespace Sample.SampleViews
                 canvas.ResumeLayout(true);
 
             })
-            .Commit(this, "Anim", length: 3000, easing: Easing.SpringOut, repeat: () => true);
+                .Commit(this, "Anim", length: 100000, easing: Easing.Linear);
         }
 
         private void AddRectangles()

@@ -1,44 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SkiaSharp;
+using SkiaSharp.Elements;
+using System;
 
 namespace Sample.SampleViews
 {
     class Truc
     {
-        public int x { get; set; }
-        public int y { get; set; }
-        public int oldX { get; set; }
-        public int oldY { get; set; }
-        public int dirX { get; set; }
-        public int dirY { get; set; }
-        public float speed { get; set; }
-        public int size { get; set; } = 10;
+        public int Mass { get; set; } = 10;
+        private SKPoint _location = new SKPoint(0, 0);
 
-        public SkiaSharp.Elements.Rectangle _rectangle;
-
+        public virtual Element Shape { set; get; }
         protected static Random rnd = new Random();
 
-        public Truc(int maxX, int maxY)
+        public virtual SKPoint Location
         {
-            x = rnd.Next(maxX);
-            y = rnd.Next(maxY);
+            set { _location = value; }
+            get { return _location; }
         }
 
-        public Truc(int maxX, int maxY, int maxSize)
+        public float X
         {
-            x = rnd.Next(maxX);
-            y = rnd.Next(maxY);
-            size = rnd.Next(maxSize);
+            get { return Shape.X; }
+            set { Shape.X = value; }
         }
 
-        public Truc() { }
-
-        public void move()
+        public float Y
         {
-            x += dirX;
-            y += dirY;
+            get { return Shape.Y; }
+            set { Shape.Y = value; }
         }
-        
+
+        public int Size
+        {
+            get { return  (int)Shape.Size.Height; }
+            set { Shape.Size = new SKSize(value, value); }
+        }
+
+        public virtual SKColor Color { get; set; }
+
+
     }
 }

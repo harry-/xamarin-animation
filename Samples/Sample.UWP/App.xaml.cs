@@ -5,6 +5,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config", Watch = true)]
+
 namespace Sample.UWP
 {
     /// <summary>
@@ -18,6 +20,7 @@ namespace Sample.UWP
         /// </summary>
         public App()
         {
+         
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
